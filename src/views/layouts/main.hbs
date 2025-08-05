@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="{{locale}}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{#if title}}{{title}} - {{/if}}{{siteName}}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    
+    <meta name="description" content="{{siteName}} - World of Warcraft Private Server Armory and Account Management">
+    <meta property="og:title" content="{{#if title}}{{title}} - {{/if}}{{siteName}}">
+    <meta property="og:description" content="{{siteName}} - WoW Private Server">
+    <meta property="og:type" content="website">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/" style="font-size: 1.1rem; padding: 0.5rem 0;">
+                <i class="fas fa-shield-alt me-2"></i>{{siteName}}
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {{#if (eq currentUrl '/')}}active{{/if}}" href="/">
+                            <i class="fas fa-home me-1"></i>{{__ "nav.home"}}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{#if (eq currentUrl '/search')}}active{{/if}}" href="/search">
+                            <i class="fas fa-search me-1"></i>{{__ "nav.search"}}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{#if (eq currentUrl '/ladder')}}active{{/if}}" href="/ladder">
+                            <i class="fas fa-trophy me-1"></i>{{__ "nav.ladder"}}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{#if (eq currentUrl '/online')}}active{{/if}}" href="/online">
+                            <i class="fas fa-users me-1"></i>{{__ "nav.online"}}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{#if (eq currentUrl '/stats')}}active{{/if}}" href="/stats">
+                            <i class="fas fa-chart-bar me-1"></i>{{__ "nav.stats"}}
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <!-- Language Switcher -->
+                    <li class="nav-item dropdown me-2">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-globe me-1"></i>
+                            {{#if (eq locale 'mn')}}Монгол{{else}}English{{/if}}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item {{#if (eq locale 'mn')}}active{{/if}}" href="javascript:void(0)" onclick="switchLanguage('mn')">
+                                Монгол (Mongolian)
+                            </a></li>
+                            <li><a class="dropdown-item {{#if (eq locale 'en')}}active{{/if}}" href="javascript:void(0)" onclick="switchLanguage('en')">
+                                English
+                            </a></li>
+                        </ul>
+                    </li>
+                    
+                    {{#if user}}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i>{{user.username}}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/account/dashboard">
+                                    <i class="fas fa-tachometer-alt me-2"></i>{{__ "nav.dashboard"}}
+                                </a></li>
+                                <li><a class="dropdown-item" href="/account/characters">
+                                    <i class="fas fa-users me-2"></i>{{__ "nav.my_characters"}}
+                                </a></li>
+                                <li><a class="dropdown-item" href="/account/settings">
+                                    <i class="fas fa-cog me-2"></i>{{__ "nav.settings"}}
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/auth/logout">
+                                    <i class="fas fa-sign-out-alt me-2"></i>{{__ "nav.logout"}}
+                                </a></li>
+                            </ul>
+                        </li>
+                    {{else}}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/auth/login">
+                                <i class="fas fa-sign-in-alt me-1"></i>{{__ "nav.login"}}
+                            </a>
+                        </li>
+                        {{#if (eq process.env.ENABLE_REGISTRATION 'true')}}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/auth/register">
+                                <i class="fas fa-user-plus me-1"></i>{{__ "nav.register"}}
+                            </a>
+                        </li>
+                        {{/if}}
+                    {{/if}}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {{#if messages.success}}
+        <div class="alert alert-success alert-dismissible fade show m-0" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{messages.success}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {{/if}}
+    {{#if messages.error}}
+        <div class="alert alert-danger alert-dismissible fade show m-0" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>{{messages.error}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {{/if}}
+    {{#if messages.warning}}
+        <div class="alert alert-warning alert-dismissible fade show m-0" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>{{messages.warning}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {{/if}}
+    {{#if messages.info}}
+        <div class="alert alert-info alert-dismissible fade show m-0" role="alert">
+            <i class="fas fa-info-circle me-2"></i>{{messages.info}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {{/if}}
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        {{{body}}}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>{{siteName}}</h5>
+                    <p class="mb-0">{{__ "footer.description"}}</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        <i class="fas fa-code me-1"></i>
+                        {{__ "footer.powered_by"}} <a href="https://www.xmeta.mn" target="_blank" class="text-light">xMeta</a>
+                    </p>
+                    <small class="text-muted">{{__ "footer.copyright" siteName=siteName}}</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery (required for viewer.min.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="/js/main.js"></script>
+    
+    <!-- Language Switcher Script -->
+    <script>
+    function switchLanguage(lang) {
+        // Get current URL without lang parameter
+        const url = new URL(window.location);
+        url.searchParams.set('lang', lang);
+        
+        // Set cookie for immediate persistence
+        document.cookie = `locale=${lang}; path=/; max-age=${365 * 24 * 60 * 60}`;
+        
+        // Redirect to current page with new language
+        window.location.href = url.toString();
+    }
+    </script>
+</body>
+</html>

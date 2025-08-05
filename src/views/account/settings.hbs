@@ -1,0 +1,197 @@
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">{{__ "settings.title"}}</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Account Information -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2"></i>{{__ "settings.account_information"}}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">{{__ "settings.username"}}</dt>
+                        <dd class="col-sm-9">{{user.username}}</dd>
+                        
+                        <dt class="col-sm-3">{{__ "settings.current_email"}}</dt>
+                        <dd class="col-sm-9">{{user.email}}</dd>
+                        
+                        <dt class="col-sm-3">{{__ "settings.account_created"}}</dt>
+                        <dd class="col-sm-9">{{formatDate user.joindate}}</dd>
+                        
+                        <dt class="col-sm-3">{{__ "settings.expansion"}}</dt>
+                        <dd class="col-sm-9">
+                            {{#if (eq user.expansion 2)}}
+                                <span class="badge bg-info">Wrath of the Lich King</span>
+                            {{else if (eq user.expansion 1)}}
+                                <span class="badge bg-success">The Burning Crusade</span>
+                            {{else}}
+                                <span class="badge bg-secondary">Classic</span>
+                            {{/if}}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Change Password -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-lock me-2"></i>{{__ "settings.change_password"}}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/account/change-password">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                        
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label">{{__ "settings.current_password"}}</label>
+                            <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">{{__ "settings.new_password"}}</label>
+                            <input type="password" class="form-control" id="newPassword" name="newPassword" 
+                                   required minlength="6" maxlength="50">
+                            <div class="form-text">{{__ "settings.password_help"}}</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">{{__ "settings.confirm_new_password"}}</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" 
+                                   required minlength="6" maxlength="50">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-save me-2"></i>{{__ "settings.change_password_button"}}
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Change Email -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-envelope me-2"></i>{{__ "settings.change_email"}}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/account/change-email">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                        
+                        <div class="mb-3">
+                            <label for="newEmail" class="form-label">{{__ "settings.new_email"}}</label>
+                            <input type="email" class="form-control" id="newEmail" name="newEmail" 
+                                   value="{{user.email}}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">{{__ "settings.confirm_with_password"}}</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <div class="form-text">{{__ "settings.password_confirm_help"}}</div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-info">
+                            <i class="fas fa-save me-2"></i>{{__ "settings.update_email_button"}}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>{{__ "settings.security_tips"}}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            {{__ "settings.strong_password"}}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            {{__ "settings.keep_email_updated"}}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            {{__ "settings.never_share_details"}}
+                        </li>
+                        <li class="mb-0">
+                            <i class="fas fa-check text-success me-2"></i>
+                            {{__ "settings.logout_shared_computers"}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cog me-2"></i>{{__ "settings.account_actions"}}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="/account/dashboard" class="btn btn-outline-primary">
+                            <i class="fas fa-tachometer-alt me-2"></i>{{__ "settings.dashboard"}}
+                        </a>
+                        <a href="/account/characters" class="btn btn-outline-info">
+                            <i class="fas fa-users me-2"></i>{{__ "settings.my_characters"}}
+                        </a>
+                        <hr>
+                        <a href="/auth/logout" class="btn btn-outline-danger">
+                            <i class="fas fa-sign-out-alt me-2"></i>{{__ "settings.logout"}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Password confirmation validation
+document.getElementById('confirmPassword').addEventListener('input', function() {
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = this.value;
+    
+    if (newPassword !== confirmPassword) {
+        this.setCustomValidity('{{__ "auth.passwords_no_match"}}');
+        this.classList.add('is-invalid');
+        this.classList.remove('is-valid');
+    } else {
+        this.setCustomValidity('');
+        this.classList.remove('is-invalid');
+        this.classList.add('is-valid');
+    }
+});
+
+// New password strength indicator
+document.getElementById('newPassword').addEventListener('input', function() {
+    const password = this.value;
+    const strength = calculatePasswordStrength(password);
+    // Could add password strength indicator here
+});
+
+function calculatePasswordStrength(password) {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^a-zA-Z0-9]/.test(password)) strength++;
+    return strength;
+}
+</script>

@@ -1,0 +1,249 @@
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <i class="fas fa-chart-bar text-info me-2"></i>{{__ "stats.title"}}
+            </h1>
+        </div>
+    </div>
+
+    <!-- Main Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-users text-primary fs-1 mb-3"></i>
+                    <h2 class="text-primary mb-2">{{stats.totalCharacters}}</h2>
+                    <h6 class="text-muted mb-0">{{__ "stats.total_characters"}}</h6>
+                    <small class="text-muted">{{__ "stats.all_time_created"}}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-circle text-success fs-1 mb-3"></i>
+                    <h2 class="text-success mb-2">{{stats.onlineCharacters}}</h2>
+                    <h6 class="text-muted mb-0">{{__ "stats.players_online"}}</h6>
+                    <small class="text-muted">{{__ "stats.currently_active"}}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-crown text-warning fs-1 mb-3"></i>
+                    <h2 class="text-warning mb-2">{{stats.maxLevel}}</h2>
+                    <h6 class="text-muted mb-0">{{__ "stats.maximum_level"}}</h6>
+                    <small class="text-muted">{{__ "stats.highest_achieved"}}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-chart-line text-info fs-1 mb-3"></i>
+                    <h2 class="text-info mb-2">{{stats.averageLevel}}</h2>
+                    <h6 class="text-muted mb-0">{{__ "stats.average_level"}}</h6>
+                    <small class="text-muted">{{__ "stats.all_characters"}}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Server Information -->
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-server me-2"></i>{{__ "stats.server_information"}}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">{{__ "stats.server_name"}}</dt>
+                        <dd class="col-sm-8">{{siteName}}</dd>
+                        
+                        <dt class="col-sm-4">{{__ "stats.expansion"}}</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-info">Wrath of the Lich King</span>
+                        </dd>
+                        
+                        <dt class="col-sm-4">{{__ "stats.core"}}</dt>
+                        <dd class="col-sm-8">
+                            <a href="https://github.com/azerothcore/azerothcore-wotlk" target="_blank" class="text-decoration-none">
+                                AzerothCore
+                            </a>
+                        </dd>
+                        
+                        <dt class="col-sm-4">{{__ "stats.max_level"}}</dt>
+                        <dd class="col-sm-8">{{stats.maxLevel}}</dd>
+                        
+                        <dt class="col-sm-4">{{__ "stats.realm_type"}}</dt>
+                        <dd class="col-sm-8">PvP</dd>
+                        
+                        <dt class="col-sm-4">{{__ "stats.rates"}}</dt>
+                        <dd class="col-sm-8">Custom</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>{{__ "stats.quick_stats"}}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 mb-3">
+                            <i class="fas fa-percentage text-success fs-3 mb-2 d-block"></i>
+                            <h5 class="text-success mb-1">
+                                {{#if (gt stats.totalCharacters 0)}}
+                                    {{math stats.onlineCharacters "/" stats.totalCharacters "*" 100 "round"}}%
+                                {{else}}
+                                    0%
+                                {{/if}}
+                            </h5>
+                            <small class="text-muted">{{__ "stats.online_rate"}}</small>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <i class="fas fa-star text-warning fs-3 mb-2 d-block"></i>
+                            <h5 class="text-warning mb-1">80</h5>
+                            <small class="text-muted">{{__ "stats.level_cap"}}</small>
+                        </div>
+                        <div class="col-6">
+                            <i class="fas fa-shield-alt text-primary fs-3 mb-2 d-block"></i>
+                            <h5 class="text-primary mb-1">PvP</h5>
+                            <small class="text-muted">{{__ "stats.server_type"}}</small>
+                        </div>
+                        <div class="col-6">
+                            <i class="fas fa-globe text-info fs-3 mb-2 d-block"></i>
+                            <h5 class="text-info mb-1">24/7</h5>
+                            <small class="text-muted">{{__ "stats.uptime"}}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Summary -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-activity me-2"></i>{{__ "stats.activity_overview"}}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex align-items-center justify-content-center mb-2">
+                                <div class="bg-primary rounded-circle p-3 me-3">
+                                    <i class="fas fa-user-plus text-white fs-4"></i>
+                                </div>
+                                <div class="text-start">
+                                    <h4 class="mb-0">{{stats.totalCharacters}}</h4>
+                                    <small class="text-muted">{{__ "stats.characters_created"}}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex align-items-center justify-content-center mb-2">
+                                <div class="bg-success rounded-circle p-3 me-3">
+                                    <i class="fas fa-play text-white fs-4"></i>
+                                </div>
+                                <div class="text-start">
+                                    <h4 class="mb-0">{{stats.onlineCharacters}}</h4>
+                                    <small class="text-muted">{{__ "stats.active_players"}}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex align-items-center justify-content-center mb-2">
+                                <div class="bg-warning rounded-circle p-3 me-3">
+                                    <i class="fas fa-trophy text-white fs-4"></i>
+                                </div>
+                                <div class="text-start">
+                                    <h4 class="mb-0">{{stats.maxLevel}}</h4>
+                                    <small class="text-muted">{{__ "stats.max_level_reached"}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-rocket me-2"></i>{{__ "stats.explore_server"}}
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="/ladder" class="btn btn-outline-warning btn-lg w-100">
+                                <i class="fas fa-trophy mb-2 d-block fs-3"></i>
+                                <strong>{{__ "stats.character_ladder"}}</strong>
+                                <br><small>{{__ "stats.top_players"}}</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="/online" class="btn btn-outline-success btn-lg w-100">
+                                <i class="fas fa-circle mb-2 d-block fs-3"></i>
+                                <strong>{{__ "stats.online_players"}}</strong>
+                                <br><small>{{__ "stats.currently_active_short"}}</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="/search" class="btn btn-outline-primary btn-lg w-100">
+                                <i class="fas fa-search mb-2 d-block fs-3"></i>
+                                <strong>{{__ "stats.search_characters"}}</strong>
+                                <br><small>{{__ "stats.find_players"}}</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {{#unless user}}
+                            <a href="/auth/register" class="btn btn-outline-info btn-lg w-100">
+                                <i class="fas fa-user-plus mb-2 d-block fs-3"></i>
+                                <strong>{{__ "stats.join_server"}}</strong>
+                                <br><small>{{__ "stats.create_account"}}</small>
+                            </a>
+                            {{else}}
+                            <a href="/account/dashboard" class="btn btn-outline-info btn-lg w-100">
+                                <i class="fas fa-tachometer-alt mb-2 d-block fs-3"></i>
+                                <strong>{{__ "stats.my_account"}}</strong>
+                                <br><small>{{__ "stats.dashboard"}}</small>
+                            </a>
+                            {{/unless}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-refresh stats every 60 seconds
+setInterval(function() {
+    // Only refresh the stats numbers, not the whole page
+    fetch('/api/stats')
+        .then(response => response.json())
+        .then(data => {
+            // Update stats if API endpoint exists
+            console.log('Stats updated:', data);
+        })
+        .catch(err => console.log('Stats refresh not available'));
+}, 60000);
+</script>

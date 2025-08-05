@@ -1,0 +1,46 @@
+<h3 class="text-center mb-4">{{__ "auth.login_title"}}</h3>
+
+<form method="POST" action="/auth/login">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    
+    <div class="mb-3">
+        <label for="username" class="form-label">{{__ "auth.username"}}</label>
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="fas fa-user"></i>
+            </span>
+            <input type="text" class="form-control" id="username" name="username" required 
+                   pattern="[a-zA-Z0-9]+" minlength="3" maxlength="16"
+                   placeholder="{{__ "auth.enter_username"}}">
+        </div>
+        <div class="form-text">{{__ "auth.username_help"}}</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="password" class="form-label">{{__ "auth.password"}}</label>
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="fas fa-lock"></i>
+            </span>
+            <input type="password" class="form-control" id="password" name="password" required 
+                   minlength="3" maxlength="50" placeholder="{{__ "auth.enter_password"}}">
+        </div>
+    </div>
+
+    <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fas fa-sign-in-alt me-2"></i>{{__ "auth.login_button"}}
+        </button>
+    </div>
+</form>
+
+{{#if (eq process.env.ENABLE_REGISTRATION 'true')}}
+<hr class="my-4">
+
+<div class="text-center">
+    <p class="mb-2">{{__ "auth.no_account"}}</p>
+    <a href="/auth/register" class="btn btn-outline-primary">
+        <i class="fas fa-user-plus me-2"></i>{{__ "auth.create_account"}}
+    </a>
+</div>
+{{/if}}

@@ -1,0 +1,203 @@
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>{{__ "account_characters.title"}}</h1>
+                <a href="/account/dashboard" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-1"></i>{{__ "account_characters.back_to_dashboard"}}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-users me-2"></i>{{__ "account_characters.character_list"}}
+                    </h5>
+                    <span class="badge bg-light text-dark">{{characters.length}} {{__ "account_characters.characters"}}</span>
+                </div>
+                <div class="card-body p-0">
+                    {{#if characters.length}}
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>{{__ "account_characters.character"}}</th>
+                                        <th>{{__ "account_characters.level"}}</th>
+                                        <th>{{__ "account_characters.class"}}</th>
+                                        <th>{{__ "account_characters.race"}}</th>
+                                        <th>{{__ "account_characters.zone"}}</th>
+                                        <th>{{__ "account_characters.status"}}</th>
+                                        <th>{{__ "account_characters.playtime"}}</th>
+                                        <th>{{__ "account_characters.last_played"}}</th>
+                                        <th>{{__ "account_characters.actions"}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each characters}}
+                                    <tr>
+                                        <td>
+                                            <strong>{{name}}</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">{{level}}</span>
+                                        </td>
+                                        <td>
+                                            <span data-class="{{class}}">{{className class}}</span>
+                                        </td>
+                                        <td>{{raceName race}}</td>
+                                        <td>
+                                            <small class="text-muted">{{#if zone}}Zone {{zone}}{{else}}{{__ "account_characters.unknown"}}{{/if}}</small>
+                                        </td>
+                                        <td>
+                                            {{#if online}}
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-circle me-1"></i>{{__ "account_characters.online"}}
+                                                </span>
+                                            {{else}}
+                                                <span class="badge bg-secondary">
+                                                    <i class="fas fa-circle me-1"></i>{{__ "account_characters.offline"}}
+                                                </span>
+                                            {{/if}}
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">{{formatPlaytime totaltime}}</small>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">
+                                                {{#if logout_time}}
+                                                    {{formatDate logout_time}}
+                                                {{else}}
+                                                    {{__ "account_characters.never"}}
+                                                {{/if}}
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="/character/{{name}}" class="btn btn-outline-primary" title="{{__ "account_characters.view_public_profile"}}">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="/account/character/{{guid}}" class="btn btn-outline-info" title="{{__ "account_characters.character_details"}}">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    {{else}}
+                        <div class="p-5 text-center text-muted">
+                            <i class="fas fa-user-plus fs-1 mb-3 opacity-50"></i>
+                            <h5>{{__ "account_characters.no_characters_title"}}</h5>
+                            <p class="mb-3">{{__ "account_characters.no_characters_description"}}</p>
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a href="/" class="btn btn-primary">
+                                    <i class="fas fa-home me-1"></i>{{__ "account_characters.go_to_homepage"}}
+                                </a>
+                                <a href="/search" class="btn btn-outline-info">
+                                    <i class="fas fa-search me-1"></i>{{__ "account_characters.browse_other_characters"}}
+                                </a>
+                            </div>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Character Statistics -->
+    {{#if characters.length}}
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-users text-primary fs-1 mb-2"></i>
+                    <h4 class="text-primary">{{characters.length}}</h4>
+                    <small class="text-muted">{{__ "account_characters.total_characters"}}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-crown text-warning fs-1 mb-2"></i>
+                    <h4 class="text-warning">
+                        {{#each characters}}
+                            {{#if @first}}{{level}}{{/if}}
+                        {{/each}}
+                    </h4>
+                    <small class="text-muted">{{__ "account_characters.highest_level"}}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-circle text-success fs-1 mb-2"></i>
+                    <h4 class="text-success">
+                        {{#math characters "count" "online" true}}{{/math}}
+                    </h4>
+                    <small class="text-muted">{{__ "account_characters.currently_online"}}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-clock text-info fs-1 mb-2"></i>
+                    <h4 class="text-info">
+                        {{#math characters "sum" "totaltime" "formatPlaytime"}}{{/math}}
+                    </h4>
+                    <small class="text-muted">{{__ "account_characters.total_playtime"}}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="mb-3">{{__ "account_characters.quick_actions"}}</h5>
+                    <div class="d-flex gap-2 justify-content-center flex-wrap">
+                        <a href="/account/dashboard" class="btn btn-outline-primary">
+                            <i class="fas fa-tachometer-alt me-1"></i>{{__ "account_characters.dashboard"}}
+                        </a>
+                        <a href="/account/settings" class="btn btn-outline-secondary">
+                            <i class="fas fa-cog me-1"></i>{{__ "account_characters.account_settings"}}
+                        </a>
+                        <a href="/ladder" class="btn btn-outline-warning">
+                            <i class="fas fa-trophy me-1"></i>{{__ "account_characters.character_ladder"}}
+                        </a>
+                        <a href="/online" class="btn btn-outline-success">
+                            <i class="fas fa-circle me-1"></i>{{__ "account_characters.online_players"}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+</div>
+
+<script>
+// Apply class colors after page load
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.ModernArmory && window.ModernArmory.classColors) {
+        const classElements = document.querySelectorAll('[data-class]');
+        classElements.forEach(element => {
+            const classId = parseInt(element.dataset.class);
+            if (window.ModernArmory.classColors[classId]) {
+                element.style.color = window.ModernArmory.classColors[classId];
+                element.style.fontWeight = 'bold';
+            }
+        });
+    }
+});
+</script>

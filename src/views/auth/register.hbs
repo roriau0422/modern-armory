@@ -1,0 +1,89 @@
+<h3 class="text-center mb-4">{{__ "auth.register_title"}}</h3>
+
+<form method="POST" action="/auth/register">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    
+    <div class="mb-3">
+        <label for="username" class="form-label">{{__ "auth.username"}}</label>
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="fas fa-user"></i>
+            </span>
+            <input type="text" class="form-control" id="username" name="username" required 
+                   pattern="[a-zA-Z0-9]+" minlength="3" maxlength="16"
+                   placeholder="{{__ "auth.choose_username"}}">
+        </div>
+        <div class="form-text">{{__ "auth.username_help"}}</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">{{__ "auth.email"}}</label>
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="fas fa-envelope"></i>
+            </span>
+            <input type="email" class="form-control" id="email" name="email" required 
+                   placeholder="{{__ "auth.enter_email"}}">
+        </div>
+        <div class="form-text">{{__ "auth.email_help"}}</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="password" class="form-label">{{__ "auth.password"}}</label>
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="fas fa-lock"></i>
+            </span>
+            <input type="password" class="form-control" id="password" name="password" required 
+                   minlength="6" maxlength="50" placeholder="{{__ "auth.create_password"}}">
+        </div>
+        <div class="form-text">{{__ "auth.password_help"}}</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="confirmPassword" class="form-label">{{__ "auth.confirm_password"}}</label>
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="fas fa-lock"></i>
+            </span>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required 
+                   minlength="6" maxlength="50" placeholder="{{__ "auth.confirm_your_password"}}">
+        </div>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="terms" required>
+        <label class="form-check-label" for="terms">
+            {{__ "auth.agree_terms"}}
+        </label>
+    </div>
+
+    <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fas fa-user-plus me-2"></i>{{__ "auth.register_button"}}
+        </button>
+    </div>
+</form>
+
+<hr class="my-4">
+
+<div class="text-center">
+    <p class="mb-2">{{__ "auth.already_have_account"}}</p>
+    <a href="/auth/login" class="btn btn-outline-primary">
+        <i class="fas fa-sign-in-alt me-2"></i>{{__ "auth.login_button"}}
+    </a>
+</div>
+
+<script>
+// Password confirmation validation
+document.getElementById('confirmPassword').addEventListener('input', function() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = this.value;
+    
+    if (password !== confirmPassword) {
+        this.setCustomValidity('{{__ "auth.passwords_no_match"}}');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+</script>

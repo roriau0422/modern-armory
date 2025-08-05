@@ -1,0 +1,173 @@
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Character Search</h1>
+        </div>
+    </div>
+
+    <!-- Search Form -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <form action="/search" method="GET">
+                        <div class="input-group input-group-lg">
+                            <input type="text" name="q" class="form-control" 
+                                   placeholder="Enter character name..." 
+                                   value="{{query}}" required autofocus>
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search me-2"></i>Search
+                            </button>
+                        </div>
+                        <div class="form-text mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Search for characters by name. Partial matches are supported.
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    {{#if hasSearched}}
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-search me-2"></i>Search Results for "{{query}}"
+                    </h5>
+                    <span class="badge bg-light text-dark">{{characters.length}} found</span>
+                </div>
+                <div class="card-body p-0">
+                    {{#if characters.length}}
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Character</th>
+                                        <th>Level</th>
+                                        <th>Class</th>
+                                        <th>Race</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each characters}}
+                                    <tr>
+                                        <td>
+                                            <strong><a href="/character/{{name}}" class="text-decoration-none">{{name}}</a></strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">{{level}}</span>
+                                        </td>
+                                        <td>
+                                            <span data-class="{{class}}">{{className class}}</span>
+                                        </td>
+                                        <td>{{raceName race}}</td>
+                                        <td>
+                                            {{#if online}}
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-circle me-1"></i>Online
+                                                </span>
+                                            {{else}}
+                                                <span class="badge bg-secondary">
+                                                    <i class="fas fa-circle me-1"></i>Offline
+                                                </span>
+                                            {{/if}}
+                                        </td>
+                                        <td>
+                                            <a href="/character/{{name}}" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-eye me-1"></i>View Profile
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    {{else}}
+                        <div class="p-5 text-center text-muted">
+                            <i class="fas fa-search fs-1 mb-3 opacity-50"></i>
+                            <h5>No Characters Found</h5>
+                            <p class="mb-0">No characters match your search criteria "{{query}}".</p>
+                            <p class="small">Try using a different search term or check the spelling.</p>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{else}}
+    <!-- Search Tips -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>Search Tips
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Enter part of a character name to find matches
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Search is case-insensitive
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Use at least 2 characters for better results
+                        </li>
+                        <li class="mb-0">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Click on any character name to view their full profile
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    <!-- Quick Links -->
+    {{#unless hasSearched}}
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <h3 class="mb-3">Or Browse</h3>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="/ladder" class="btn btn-outline-primary">
+                    <i class="fas fa-trophy me-2"></i>Top Characters
+                </a>
+                <a href="/online" class="btn btn-outline-success">
+                    <i class="fas fa-circle me-2"></i>Online Players
+                </a>
+                <a href="/stats" class="btn btn-outline-info">
+                    <i class="fas fa-chart-bar me-2"></i>Server Stats
+                </a>
+            </div>
+        </div>
+    </div>
+    {{/unless}}
+</div>
+
+<script>
+// Apply class colors after page load
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.ModernArmory && window.ModernArmory.classColors) {
+        const classElements = document.querySelectorAll('[data-class]');
+        classElements.forEach(element => {
+            const classId = parseInt(element.dataset.class);
+            if (window.ModernArmory.classColors[classId]) {
+                element.style.color = window.ModernArmory.classColors[classId];
+                element.style.fontWeight = 'bold';
+            }
+        });
+    }
+});
+</script>

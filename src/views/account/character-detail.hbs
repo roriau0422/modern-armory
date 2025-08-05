@@ -1,0 +1,359 @@
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/account/dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/account/characters">My Characters</a></li>
+                    <li class="breadcrumb-item active">{{character.name}}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Character Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="mb-2">
+                                <span data-class="{{character.class}}">{{character.name}}</span>
+                                {{#if character.online}}
+                                    <span class="badge bg-success ms-2">
+                                        <i class="fas fa-circle me-1"></i>Online
+                                    </span>
+                                {{else}}
+                                    <span class="badge bg-secondary ms-2">
+                                        <i class="fas fa-circle me-1"></i>Offline
+                                    </span>
+                                {{/if}}
+                            </h1>
+                            <p class="lead mb-2">
+                                Level {{character.level}} {{className character.class}} {{raceName character.race}}
+                            </p>
+                            {{#if guild}}
+                                <p class="text-muted mb-0">
+                                    <i class="fas fa-users me-1"></i>
+                                    Guild: <strong>{{guild.guild_name}}</strong>
+                                </p>
+                            {{/if}}
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <a href="/character/{{character.name}}" class="btn btn-outline-primary mb-2">
+                                <i class="fas fa-eye me-1"></i>View Public Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Detailed Character Info -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2"></i>Character Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row small">
+                        <dt class="col-sm-4">Name:</dt>
+                        <dd class="col-sm-8">{{character.name}}</dd>
+                        
+                        <dt class="col-sm-4">GUID:</dt>
+                        <dd class="col-sm-8"><code>{{character.guid}}</code></dd>
+                        
+                        <dt class="col-sm-4">Level:</dt>
+                        <dd class="col-sm-8"><span class="badge bg-primary">{{character.level}}</span></dd>
+                        
+                        <dt class="col-sm-4">Experience:</dt>
+                        <dd class="col-sm-8">{{character.xp}} XP</dd>
+                        
+                        <dt class="col-sm-4">Class:</dt>
+                        <dd class="col-sm-8" data-class="{{character.class}}">{{className character.class}}</dd>
+                        
+                        <dt class="col-sm-4">Race:</dt>
+                        <dd class="col-sm-8">{{raceName character.race}}</dd>
+                        
+                        <dt class="col-sm-4">Gender:</dt>
+                        <dd class="col-sm-8">{{#if (eq character.gender 0)}}Male{{else}}Female{{/if}}</dd>
+                        
+                        <dt class="col-sm-4">Zone:</dt>
+                        <dd class="col-sm-8">{{character.zone}}</dd>
+                        
+                        <dt class="col-sm-4">Map:</dt>
+                        <dd class="col-sm-8">{{character.map}}</dd>
+                        
+                        {{#if character.money}}
+                        <dt class="col-sm-4">Money:</dt>
+                        <dd class="col-sm-8">
+                            <span class="text-warning">
+                                {{#math character.money "/" 10000 "floor"}}{{/math}}g 
+                                {{#math character.money "%" 10000 "/" 100 "floor"}}{{/math}}s 
+                                {{#math character.money "%" 100}}{{/math}}c
+                            </span>
+                        </dd>
+                        {{/if}}
+                        
+                        <dt class="col-sm-4">Status:</dt>
+                        <dd class="col-sm-8">
+                            {{#if character.online}}
+                                <span class="text-success"><i class="fas fa-circle me-1"></i>Online</span>
+                            {{else}}
+                                <span class="text-secondary"><i class="fas fa-circle me-1"></i>Offline</span>
+                            {{/if}}
+                        </dd>
+                        
+                        {{#if character.logout_time}}
+                        <dt class="col-sm-4">Last Login:</dt>
+                        <dd class="col-sm-8">{{formatDate character.logout_time}}</dd>
+                        {{/if}}
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Statistics -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>Time Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row small">
+                        {{#if character.totaltime}}
+                        <dt class="col-sm-4">Total Playtime:</dt>
+                        <dd class="col-sm-8">
+                            <strong>{{formatPlaytime character.totaltime}}</strong>
+                        </dd>
+                        {{/if}}
+                        
+                        {{#if character.leveltime}}
+                        <dt class="col-sm-4">Level Playtime:</dt>
+                        <dd class="col-sm-8">{{formatPlaytime character.leveltime}}</dd>
+                        {{/if}}
+                        
+                        {{#if character.rest_bonus}}
+                        <dt class="col-sm-4">Rest Bonus:</dt>
+                        <dd class="col-sm-8">{{character.rest_bonus}}</dd>
+                        {{/if}}
+                        
+                        <dt class="col-sm-4">Playtime Today:</dt>
+                        <dd class="col-sm-8">
+                            {{#if character.online}}
+                                <span class="text-success">Currently playing</span>
+                            {{else}}
+                                <span class="text-muted">Not online</span>
+                            {{/if}}
+                        </dd>
+                    </dl>
+                    
+                    <!-- Playtime Visualization -->
+                    {{#if character.totaltime}}
+                    <div class="mt-3">
+                        <h6 class="mb-2">Playtime Breakdown</h6>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="bg-primary text-white p-2 rounded">
+                                    <div class="h5 mb-0">{{#math character.totaltime "/" 86400 "floor"}}{{/math}}</div>
+                                    <small>Days</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="bg-info text-white p-2 rounded">
+                                    <div class="h5 mb-0">{{#math character.totaltime "%" 86400 "/" 3600 "floor"}}{{/math}}</div>
+                                    <small>Hours</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="bg-secondary text-white p-2 rounded">
+                                    <div class="h5 mb-0">{{#math character.totaltime "%" 3600 "/" 60 "floor"}}{{/math}}</div>
+                                    <small>Minutes</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PvP & Combat Stats -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-sword me-2"></i>PvP Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row small mb-0">
+                        <dt class="col-sm-6">Total Honor Points:</dt>
+                        <dd class="col-sm-6">
+                            <strong class="text-danger">{{character.totalHonorPoints}}</strong>
+                        </dd>
+                        
+                        <dt class="col-sm-6">Today's Honor:</dt>
+                        <dd class="col-sm-6">{{character.todayHonorPoints}}</dd>
+                        
+                        <dt class="col-sm-6">Yesterday's Honor:</dt>
+                        <dd class="col-sm-6">{{character.yesterdayHonorPoints}}</dd>
+                        
+                        <dt class="col-sm-6">Total Kills:</dt>
+                        <dd class="col-sm-6">
+                            <strong class="text-danger">{{character.totalKills}}</strong>
+                        </dd>
+                        
+                        <dt class="col-sm-6">Today's Kills:</dt>
+                        <dd class="col-sm-6">{{character.todayKills}}</dd>
+                        
+                        <dt class="col-sm-6">Yesterday's Kills:</dt>
+                        <dd class="col-sm-6">{{character.yesterdayKills}}</dd>
+                        
+                        {{#if character.arenaPoints}}
+                        <dt class="col-sm-6">Arena Points:</dt>
+                        <dd class="col-sm-6">
+                            <strong class="text-warning">{{character.arenaPoints}}</strong>
+                        </dd>
+                        {{/if}}
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <!-- Health & Resources -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-heart me-2"></i>Health & Resources
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row small mb-0">
+                        {{#if character.health}}
+                        <dt class="col-sm-4">Health:</dt>
+                        <dd class="col-sm-8">
+                            <div class="progress mb-1" style="height: 20px;">
+                                <div class="progress-bar bg-success" style="width: 100%">
+                                    {{character.health}}
+                                </div>
+                            </div>
+                        </dd>
+                        {{/if}}
+                        
+                        {{#if character.power1}}
+                        <dt class="col-sm-4">Mana/Power:</dt>
+                        <dd class="col-sm-8">
+                            <div class="progress mb-1" style="height: 20px;">
+                                <div class="progress-bar bg-primary" style="width: 100%">
+                                    {{character.power1}}
+                                </div>
+                            </div>
+                        </dd>
+                        {{/if}}
+                        
+                        {{#if character.power2}}
+                        <dt class="col-sm-4">Rage/Energy:</dt>
+                        <dd class="col-sm-8">{{character.power2}}</dd>
+                        {{/if}}
+                        
+                        {{#if character.power3}}
+                        <dt class="col-sm-4">Focus:</dt>
+                        <dd class="col-sm-8">{{character.power3}}</dd>
+                        {{/if}}
+                        
+                        {{#if character.power4}}
+                        <dt class="col-sm-4">Happiness:</dt>
+                        <dd class="col-sm-8">{{character.power4}}</dd>
+                        {{/if}}
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Equipment & Talents -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tshirt me-2"></i>Equipment Summary
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {{#if equipment.length}}
+                        <p class="mb-2">
+                            <strong>{{equipment.length}}</strong> equipped items
+                        </p>
+                        <div class="row">
+                            {{#each equipment}}
+                                <div class="col-3 mb-2 text-center">
+                                    <div class="equipment-slot">
+                                        <i class="fas fa-shield-alt text-primary"></i>
+                                        <small class="d-block mt-1">{{slot}}</small>
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+                    {{else}}
+                        <div class="text-center text-muted py-3">
+                            <i class="fas fa-tshirt fs-3 mb-2 opacity-50"></i>
+                            <p class="mb-0">No equipment data</p>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Talents & Achievements
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <i class="fas fa-star text-warning fs-1 mb-2"></i>
+                            <h4 class="text-warning">{{talents.length}}</h4>
+                            <small class="text-muted">Talents Learned</small>
+                        </div>
+                        <div class="col-6">
+                            <i class="fas fa-trophy text-info fs-1 mb-2"></i>
+                            <h4 class="text-info">{{achievements.length}}</h4>
+                            <small class="text-muted">Achievements</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Apply class colors after page load
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.ModernArmory && window.ModernArmory.classColors) {
+        const classElements = document.querySelectorAll('[data-class]');
+        classElements.forEach(element => {
+            const classId = parseInt(element.dataset.class);
+            if (window.ModernArmory.classColors[classId]) {
+                element.style.color = window.ModernArmory.classColors[classId];
+                element.style.fontWeight = 'bold';
+            }
+        });
+    }
+});
+</script>

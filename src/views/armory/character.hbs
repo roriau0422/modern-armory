@@ -1,0 +1,407 @@
+<div class="container py-4">
+    <!-- Character Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="mb-2">
+                                <span data-class="{{character.class}}">{{character.name}}</span>
+                                {{#if character.online}}
+                                    <span class="badge bg-success ms-2">
+                                        <i class="fas fa-circle me-1"></i>Online
+                                    </span>
+                                {{else}}
+                                    <span class="badge bg-secondary ms-2">
+                                        <i class="fas fa-circle me-1"></i>Offline
+                                    </span>
+                                {{/if}}
+                            </h1>
+                            <p class="lead mb-0">
+                                Level {{character.level}} {{className character.class}} {{raceName character.race}}
+                            </p>
+                            {{#if guild}}
+                                <p class="text-muted mb-0">
+                                    <i class="fas fa-users me-1"></i>
+                                    Guild: <strong>{{guild.guild_name}}</strong>
+                                    {{#if guild.rank}}({{guild.rank}}){{/if}}
+                                </p>
+                            {{/if}}
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="d-flex flex-column align-items-md-end">
+                                <span class="badge bg-primary fs-6 mb-2">Level {{character.level}}</span>
+                                {{#if character.totaltime}}
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>
+                                        Playtime: {{formatPlaytime character.totaltime}}
+                                    </small>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Character Info -->
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2"></i>Character Info
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row small mb-0">
+                        <dt class="col-6 text-primary">Name:</dt>
+                        <dd class="col-6">{{character.name}}</dd>
+                        
+                        <dt class="col-6 text-primary">Level:</dt>
+                        <dd class="col-6"><span class="badge bg-primary">{{character.level}}</span></dd>
+                        
+                        <dt class="col-6 text-primary">Class:</dt>
+                        <dd class="col-6" data-class="{{character.class}}">{{className character.class}}</dd>
+                        
+                        <dt class="col-6 text-primary">Race:</dt>
+                        <dd class="col-6">{{raceName character.race}}</dd>
+                        
+                        <dt class="col-6 text-primary">Gender:</dt>
+                        <dd class="col-6">{{#if (eq character.gender 0)}}Male{{else}}Female{{/if}}</dd>
+                        
+                        {{#if character.totaltime}}
+                        <dt class="col-6 text-primary">Playtime:</dt>
+                        <dd class="col-6">{{formatPlaytime character.totaltime}}</dd>
+                        {{/if}}
+                        
+                        {{#if character.money}}
+                        <dt class="col-6 text-primary">Money:</dt>
+                        <dd class="col-6">
+                            {{#math character.money "/" 10000 "floor"}}{{/math}}g 
+                            {{#math character.money "%" 10000 "/" 100 "floor"}}{{/math}}s 
+                            {{#math character.money "%" 100}}{{/math}}c
+                        </dd>
+                        {{/if}}
+                        
+                        <dt class="col-6 text-primary">Status:</dt>
+                        <dd class="col-6">
+                            {{#if character.online}}
+                                <span class="text-success">Online</span>
+                            {{else}}
+                                <span class="text-secondary">Offline</span>
+                            {{/if}}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- PvP Stats -->
+            {{#if (or character.totalHonorPoints character.totalKills)}}
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-sword me-2"></i>PvP Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row small mb-0">
+                        {{#if character.totalHonorPoints}}
+                        <dt class="col-6 text-primary">Honor Points:</dt>
+                        <dd class="col-6">{{character.totalHonorPoints}}</dd>
+                        {{/if}}
+                        
+                        {{#if character.totalKills}}
+                        <dt class="col-6 text-primary">Total Kills:</dt>
+                        <dd class="col-6">{{character.totalKills}}</dd>
+                        {{/if}}
+                        
+                        {{#if character.arenaPoints}}
+                        <dt class="col-6 text-primary">Arena Points:</dt>
+                        <dd class="col-6">{{character.arenaPoints}}</dd>
+                        {{/if}}
+                    </dl>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+
+        <!-- 3D Model Viewer -->
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cube me-2"></i>3D Model Viewer
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <div id="model-viewer" style="width: 100%; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; position: relative;">
+                        <div class="d-flex align-items-center justify-content-center h-100">
+                            <div class="text-white">
+                                <i class="fas fa-cube fs-1 mb-3"></i>
+                                <h5>3D Character Model</h5>
+                                <p class="mb-0">Loading character model...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-outline-primary btn-sm me-1" id="rotate-left-btn" style="font-size: 0.7rem; padding: 0.25rem 0.5rem;">
+                            <i class="fas fa-undo"></i> Left
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm me-1" id="rotate-right-btn" style="font-size: 0.7rem; padding: 0.25rem 0.5rem;">
+                            <i class="fas fa-redo"></i> Right
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm" id="reset-model-btn" style="font-size: 0.7rem; padding: 0.25rem 0.5rem;">
+                            <i class="fas fa-refresh"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Talents & Achievements -->
+        <div class="col-lg-4 mb-4">
+            <!-- Talents -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Talents
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {{#if talents.length}}
+                        <p class="small text-muted mb-2">{{talents.length}} {{__ "character.talents_learned"}}</p>
+                        <div class="progress mb-2">
+                            <div class="progress-bar bg-warning" role="progressbar" 
+                                 style="width: {{percentage talents.length 71 1}}%">
+                            </div>
+                        </div>
+                        <small class="text-muted">
+                            {{percentage talents.length 71 0}}% {{__ "character.complete"}}
+                        </small>
+                    {{else}}
+                        <div class="text-center text-muted py-3">
+                            <i class="fas fa-star fs-3 mb-2 opacity-50"></i>
+                            <p class="mb-0">{{__ "character.no_talents_learned"}}</p>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+
+            <!-- Recent Achievements -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-trophy me-2"></i>Recent Achievements
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {{#if achievements.length}}
+                        <div class="achievement-list">
+                            {{#each achievements}}
+                                {{#if (lt @index 5)}}
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-medal text-warning me-2"></i>
+                                    <div class="flex-grow-1">
+                                        <small class="text-muted">Achievement {{achievement}}</small>
+                                        <br>
+                                        <small class="text-muted">{{formatDate date}}</small>
+                                    </div>
+                                </div>
+                                {{/if}}
+                            {{/each}}
+                        </div>
+                        {{#if (gt achievements.length 5)}}
+                            <small class="text-muted">
+                                ...and {{math achievements.length "-" 5}} more achievements
+                            </small>
+                        {{/if}}
+                    {{else}}
+                        <div class="text-center text-muted py-3">
+                            <i class="fas fa-trophy fs-3 mb-2 opacity-50"></i>
+                            <p class="mb-0">No achievements yet</p>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guild Information -->
+    {{#if guild}}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-users me-2"></i>Guild Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><strong>{{guild.guild_name}}</strong></h6>
+                            {{#if guild.info}}
+                                <p class="text-muted small">{{guild.info}}</p>
+                            {{/if}}
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row small mb-0">
+                                {{#if guild.rank}}
+                                <dt class="col-6">Rank:</dt>
+                                <dd class="col-6">{{guild.rank}}</dd>
+                                {{/if}}
+                                
+                                {{#if guild.createdate}}
+                                <dt class="col-6">Founded:</dt>
+                                <dd class="col-6">{{formatDate guild.createdate}}</dd>
+                                {{/if}}
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+</div>
+
+<script>
+let viewer = null;
+
+// Apply class colors after page load
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.ModernArmory && window.ModernArmory.classColors) {
+        const classElements = document.querySelectorAll('[data-class]');
+        classElements.forEach(element => {
+            const classId = parseInt(element.dataset.class);
+            if (window.ModernArmory.classColors[classId]) {
+                element.style.color = window.ModernArmory.classColors[classId];
+                element.style.fontWeight = 'bold';
+            }
+        });
+    }
+
+    // Load viewer script dynamically after jQuery is available
+    loadViewerScript();
+    
+    // Add event listeners for model viewer controls
+    setupModelControls();
+});
+
+function loadViewerScript() {
+    // Check if jQuery is loaded
+    if (typeof jQuery === 'undefined') {
+        // Retry after 100ms
+        setTimeout(loadViewerScript, 100);
+        return;
+    }
+    
+    // Load viewer script
+    const script = document.createElement('script');
+    script.src = '/js/viewer.min.js';
+    script.onload = function() {
+        // Initialize 3D Model Viewer after script loads
+        initializeModelViewer();
+    };
+    script.onerror = function() {
+        console.warn('Could not load viewer script, using fallback display');
+        initializeModelViewer();
+    };
+    document.head.appendChild(script);
+}
+
+function setupModelControls() {
+    // Add event listeners for model viewer controls
+    const rotateLeftBtn = document.getElementById('rotate-left-btn');
+    const rotateRightBtn = document.getElementById('rotate-right-btn');
+    const resetModelBtn = document.getElementById('reset-model-btn');
+    
+    if (rotateLeftBtn) {
+        rotateLeftBtn.addEventListener('click', function() {
+            rotateModel('left');
+        });
+    }
+    
+    if (rotateRightBtn) {
+        rotateRightBtn.addEventListener('click', function() {
+            rotateModel('right');
+        });
+    }
+    
+    if (resetModelBtn) {
+        resetModelBtn.addEventListener('click', function() {
+            resetModel();
+        });
+    }
+}
+
+function initializeModelViewer() {
+    try {
+        const container = document.getElementById('model-viewer');
+        if (container && window.WoWModelViewer) {
+            viewer = new WoWModelViewer({
+                container: container,
+                race: {{character.race}},
+                gender: {{character.gender}},
+                class: {{character.class}},
+                level: {{character.level}},
+                // Equipment data would go here
+                equipment: [
+                    {{#each equipment}}
+                    {
+                        slot: {{slot}},
+                        item: {{item}}
+                    }{{#unless @last}},{{/unless}}
+                    {{/each}}
+                ],
+                // Model viewer options
+                background: '/data/modelviewer-background.png',
+                width: container.offsetWidth,
+                height: 400
+            });
+
+            viewer.loadCharacter();
+        } else {
+            // Fallback if model viewer is not available
+            container.innerHTML = `
+                <div class="d-flex align-items-center justify-content-center h-100">
+                    <div class="text-white">
+                        <i class="fas fa-user fs-1 mb-3"></i>
+                        <h5>{{character.name}}</h5>
+                        <p class="mb-0">Level {{character.level}} {{className character.class}}</p>
+                        <small>3D Model Viewer Loading...</small>
+                    </div>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Model viewer initialization failed:', error);
+        const container = document.getElementById('model-viewer');
+        container.innerHTML = `
+            <div class="d-flex align-items-center justify-content-center h-100">
+                <div class="text-white">
+                    <i class="fas fa-exclamation-triangle fs-1 mb-3"></i>
+                    <h5>Model Viewer Unavailable</h5>
+                    <p class="mb-0">{{character.name}} - Level {{character.level}} {{className character.class}}</p>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function rotateModel(direction) {
+    if (viewer) {
+        const rotation = direction === 'left' ? -30 : 30;
+        viewer.rotate(rotation);
+    }
+}
+
+function resetModel() {
+    if (viewer) {
+        viewer.resetCamera();
+    }
+}
+</script>
